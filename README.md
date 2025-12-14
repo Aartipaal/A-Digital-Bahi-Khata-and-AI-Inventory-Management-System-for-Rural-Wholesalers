@@ -1,0 +1,1 @@
+# A-Digital-Bahi-Khata-and-AI-Inventory-Management-System-for-Rural-Wholesalers
