@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UDHAAR</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=ITC+Bauhaus&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ovo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Anime.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    
+    <style>
+        :root {
+            --blue: #2563EB;
+            --green: #16A34A;
+            --gold: #B86B45;
+            --dark: #1F2937;
+            --muted: #F3F4F6;
+            --card: #FFFFFF;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, 'Helvetica Neue', Arial;
+            color: var(--dark);
+            background-color: #1a1a1a;
+            overflow-x: hidden;
+            height: 100%;
+            
+        }
+        body::-webkit-scrollbar {
+  display: none;
+}
+
+        /* Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Video Controls */
+        .video-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--gold);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: var(--gold);
+            transform: scale(1.1);
+        }
+
+        /* --- Global Styles --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .page-content {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        /* Updated Nav Bar to match index.html */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 40;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-link {
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-family: 'Josefin Sans', sans-serif;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            border-radius: 30px;
+        }
+        
+        .nav-link.active, .nav-link:hover {
+            color: #ff9900;
+            background-color: rgba(255, 153, 0, 0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            left: 28px;
+        }
+        
+        .logo-container img {
+            height: 44px;
+            width: 44px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 12px;
+            background-color: #000000;
+        }
+        
+        .logo-text {
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 20px;
+            color: #fff;
+        }
+        
+        .logo-text .la {
+            font-family: 'ITC Bauhaus', system-ui;
+            color: #ff9900;
+        }
+        
+        .logo-text .ma {
+            font-family: 'Kaushan Script', cursive;
+            color: #a8690a;
+        }
+
+        /* --- Profile Page Styles --- */
+        #profile-page {
+            color: white;
+        }
+        
+.profile-container {
+    display: flex;
+    gap: 30px;
+    background-color: transparent;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    align-items: flex-start;
+}
+        
+       
+.profile-card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 30px;
+    text-align: center;
+    width: 35%;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+        
+        .profile-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid var(--gold);
+            background-color: #007bff;
+        }
+        
+        .profile-card h2 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-family: 'Cinzel', serif;
+        }
+        
+        .profile-card p {
+            color: #ddd;
+            margin-bottom: 5px;
+        }
+        
+        .profile-info-section {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 65%;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+        
+        .profile-info-section h2 {
+            color: #ff9900;
+            margin-bottom: 20px;
+            font-family: 'Cinzel', serif;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .info-table td {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .info-table td:first-child {
+            font-weight: bold;
+            width: 40%;
+            color: #ff9900;
+        }
+        
+        .info-table td:nth-child(2) {
+            text-align: center;
+            width: 10%;
+            color: #ff9900;
+        }
+        
+        .info-table td:last-child {
+            text-align: left;
+        }
+
+        /* --- About Us Page Styles --- */
+        #about-us-page {
+            color: white;
+        }
+        
+        .about-header {
+            padding: 100px 5% 50px;
+            text-align: center;
+        }
+        
+        .about-header h1 {
+            font-size: 3.5em;
+            margin: 0 0 20px;
+            font-family: 'Cinzel', serif;
+            color: #fff;
+        }
+        
+        .about-header p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 10px auto 0;
+            color: #ddd;
+        }
+        
+        .about-section {
+            padding: 40px 5%;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .about-section h2 {
+            font-size: 2em;
+            color: #ff9900;
+            margin-top: 40px;
+            font-family: 'Cinzel', serif;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+        
+        .about-section p {
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--gold);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            margin-top: 20px;
+        }
+        
+        .cta-button:hover {
+            background-color: #a55c38;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* --- Contact Us Page Styles --- */
+        #contact-page {
+            color: white;
+        }
+        
+        .contact-content {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            box-sizing: border-box;
+        }
+        
+        .contact-info-section {
+            width: 50%;
+            padding-right: 40px;
+        }
+        
+        .contact-info-section h1 {
+            font-size: 3.5em;
+            margin: 0 0 20px;
+            font-family: 'Cinzel', serif;
+            color: #fff;
+        }
+        
+        .contact-info-section > p {
+            color: #ddd;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .contact-item .icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+            color: #ff9900;
+        }
+        
+        .contact-item a, .contact-item span {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-item a:hover {
+            color: #ff9900;
+        }
+        
+        .thank-you-footer {
+            text-align: center;
+            padding: 30px 0;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff9900;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Form styling to match index.html */
+        .contact-form-section {
+            width: 50%;
+            padding-left: 40px;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .contact-form input, .contact-form textarea {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-family: Inter, sans-serif;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: #fff;
+        }
+        
+        .contact-form input::placeholder, .contact-form textarea::placeholder {
+            color: #aaa;
+        }
+        
+        .contact-form button {
+            background-color: var(--gold);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .contact-form button:hover {
+            background-color: #a55c38;
+        }
+        @media (max-width: 768px) {
+            .profile-container {
+                flex-direction: column;
+            }
+            
+            .profile-card, .profile-info-section {
+                width: 100%;
+                max-width: none;
+            }
+}
+
+        /* Responsive adjustments */
+        @media (max-width: 980px) {
+            .contact-info-section, .contact-form-section {
+                width: 100%;
+                padding: 0;
+            }
+            
+            .contact-form-section {
+                margin-top: 40px;
+            }
+            
+            .about-header h1, .contact-info-section h1 {
+                font-size: 2.5em;
+            }
+            
+            .nav-bar {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .logo-container {
+                position: relative;
+                left: 0;
+                margin-bottom: 10px;
+            }
+            
+            .video-controls {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+        
+        @media (max-width: 520px) {
+            .about-header h1, .contact-info-section h1 {
+                font-size: 2em;
+            }
+            
+            .nav-link {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            
+            .control-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Video Background with fallback -->
+    <div class="video-background">
+        <video id="bg-video" autoplay loop muted playsinline>
+            <source src="/assets/market.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <!-- Video Controls -->
+
+    <div class="nav-bar">
+        <div class="logo-container">
+             <img src="/assets/logo2.png" alt="Udhaar logo">
+            
+            <div class="logo-text"><span class="la">Udhaa</span><span class="ma">R</span></div>
+        </div>
+        <a href="#profile" class="nav-link" onclick="showPage('profile-page')">Profile</a>
+        <a href="#about-us" class="nav-link active" onclick="showPage('about-us-page')">About Us</a>
+        <a href="#contact-us" class="nav-link" onclick="showPage('contact-page')">Contact & Support</a>
+    </div>
+
+   <div id="profile-page" class="page-content">
+    <div class="profile-container">
+        <div class="profile-card">
+            <div style="width: 120px; height: 120px; border-radius: 50%; background: #007bff; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5em; border: 3px solid var(--gold);">RS</div>
+            <h2>Rohan Sharma</h2>
+            <p>Shop Owner</p>
+            <p>Shop Address: 123 Main Street, New Delhi</p>
+        </div>
+        
+        <div class="profile-info-section">
+            <h2>General Information</h2>
+            <table class="info-table">
+                <tbody>
+                    <tr><td>Shop Name</td><td>:</td><td>UDHAAR Kirana Store</td></tr>
+                    <tr><td>Owner Name</td><td>:</td><td>Rohan Sharma</td></tr>
+                    <tr><td>Phone Number</td><td>:</td><td>+91 98765 43210</td></tr>
+                    <tr><td>Shop Address</td><td>:</td><td>123 Main Street, New Delhi</td></tr>
+                    <tr><td>App Preferences</td><td>:</td><td></td></tr>
+                    <tr><td>Language</td><td>:</td><td>English/Hindi</td></tr>
+                    <tr><td>Currency</td><td>:</td><td>₹</td></tr>
+                </tbody>
+            </table>
+            <br>
+            <h2>Account & Security</h2>
+            <table class="info-table">
+                <tbody>
+                    <tr><td>Change Password</td><td>:</td><td></td></tr>
+                    <tr><td>Enable 2FA</td><td>:</td><td></td></tr>
+                    <tr><td>Notifications</td><td>:</td><td>Enabled (SMS/email)</td></tr>
+                    <tr><td>Danger Zone</td><td>:</td><td>Delete account / reset data</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    <div id="about-us-page" class="page-content active">
+        <div class="about-header">
+            <h1>About UDHAAR – Powering Dukaan Digitally</h1>
+            <p>We help small shopkeepers manage udhaar, stock, and payments digitally so they can save time and grow their business.</p>
+        </div>
+        <div class="about-section">
+            <h2>Our Story</h2>
+            <p>The inspiration for UDHAAR came from seeing local shopkeepers still using traditional bahi-khatas to manage their credit. We envisioned a simple digital solution to help them thrive in the digital age.</p>
+            
+            <h2>Our Impact</h2>
+            <p>UDHAAR has helped thousands of shops streamline their operations, leading to faster udhaar recovery and better inventory control.</p>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="#" class="cta-button">Join Us Today</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact-page" class="page-content">
+        <div class="contact-content">
+            <div class="contact-info-section">
+                <h1>Contact Us</h1>
+                <p>We're here to help you.</p>
+                <div class="contact-item">
+                    <span class="icon">📞</span>
+                    <a href="tel:+919876543210">+91 98765 43210</a>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📧</span>
+                    <a href="mailto:support@udhaarapp.com">support@udhaarapp.com</a>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📍</span>
+                    <span>Office Address: 123 Digital Lane, Tech City, India</span>
+                </div>
+            </div>
+            <div class="contact-form-section">
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea rows="4" placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="thank-you-footer">Thank You.</div>
+    </div>
+
+    <script>
+        // Initialize page with animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show active page with animation
+            const activePage = document.querySelector('.page-content.active');
+            anime({
+                targets: activePage,
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 800,
+                easing: 'easeOutExpo'
+            });
+            
+            // Initialize video controls
+            initVideoControls();
+        });
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected page with animation
+            const newPage = document.getElementById(pageId);
+            newPage.classList.add('active');
+            anime({
+                targets: newPage,
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 600,
+                easing: 'easeOutExpo'
+            });
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Find and activate the correct nav link
+            const pageHash = pageId.replace('-page', '');
+            document.querySelector(`.nav-link[href="#${pageHash}"]`).classList.add('active');
+        }
+        
+        function initVideoControls() {
+            const video = document.getElementById('bg-video');
+            const playPauseBtn = document.getElementById('play-pause');
+            const muteUnmuteBtn = document.getElementById('mute-unmute');
+            
+            // Play/Pause functionality
+            playPauseBtn.addEventListener('click', function() {
+                if (video.paused) {
+                    video.play();
+                    playPauseBtn.innerHTML = '⏸️';
+                } else {
+                    video.pause();
+                    playPauseBtn.innerHTML = '▶️';
+                }
+            });
+            
+            // Mute/Unmute functionality
+            muteUnmuteBtn.addEventListener('click', function() {
+                if (video.muted) {
+                    video.muted = false;
+                    muteUnmuteBtn.innerHTML = '🔊';
+                } else {
+                    video.muted = true;
+                    muteUnmuteBtn.innerHTML = '🔇';
+                }
+            });
+            
+            // Update button when video ends
+            video.addEventListener('ended', function() {
+                playPauseBtn.innerHTML = '▶️';
+            });
+        }
+    </script>
+
+</body>
+</html>
